@@ -5,9 +5,8 @@ print("Игра в крестики - нолики. \n"
 
 
 def chis(p):  # Проверка на число
-    X = [i for i in range(1, 10)]
     if p.isdigit():
-        if int(p) in X:
+        if int(p) in [i for i in range(1, 10)]:
             return int(p)
         else:
             print('Введите число от 1 до 9')
@@ -17,10 +16,8 @@ def chis(p):  # Проверка на число
         return pole()
 
 
-def hod(x): # Проверка на занятость ячейки
-    global P
-    if P[x] == ' ':
-        print(x)
+def hod(x, pol):  # Проверка на занятость ячейки
+    if pol[x] == ' ':
         return x
     else:
         print("Ячейка занята, попробуйте снова!")
@@ -29,7 +26,43 @@ def hod(x): # Проверка на занятость ячейки
 
 def pole():  # ход игрока
     p = input('Введите номер ячейки: ')
-    return hod(chis(p))
+    return hod(chis(p), P)
+
+
+def win(w, pole):  # Условия победы
+    if pole[1] == pole[2] == pole[3] == w or pole[4] == pole[5] == pole[6] == w or pole[7] == pole[8] == pole[9] == w:
+        print(f'--------Победил {w}--------')
+        print(f'   +---+---+---+\n'
+              f'   | {P[1]}¹| {P[2]}²| {P[3]}³|\n'
+              f'   +---+---+---+\n'
+              f'   | {P[4]}⁴| {P[5]}⁵| {P[6]}⁶|\n'
+              f'   +---+---+---+\n'
+              f'   | {P[7]}⁷| {P[8]}⁸| {P[9]}⁹|\n'
+              f'   +---+---+---+\n'
+              f' ')
+        return True
+    if pole[1] == pole[4] == pole[7] == w or pole[2] == pole[5] == pole[8] == w or pole[3] == pole[6] == pole[9] == w:
+        print(f'--------Победил {w}--------')
+        print(f'   +---+---+---+\n'
+              f'   | {P[1]}¹| {P[2]}²| {P[3]}³|\n'
+              f'   +---+---+---+\n'
+              f'   | {P[4]}⁴| {P[5]}⁵| {P[6]}⁶|\n'
+              f'   +---+---+---+\n'
+              f'   | {P[7]}⁷| {P[8]}⁸| {P[9]}⁹|\n'
+              f'   +---+---+---+\n'
+              f' ')
+        return True
+    if pole[1] == pole[5] == pole[9] == w or pole[7] == pole[5] == pole[3] == w:
+        print(f'--------Победил {w}--------')
+        print(f'   +---+---+---+\n'
+              f'   | {P[1]}¹| {P[2]}²| {P[3]}³|\n'
+              f'   +---+---+---+\n'
+              f'   | {P[4]}⁴| {P[5]}⁵| {P[6]}⁶|\n'
+              f'   +---+---+---+\n'
+              f'   | {P[7]}⁷| {P[8]}⁸| {P[9]}⁹|\n'
+              f'   +---+---+---+\n'
+              f' ')
+        return True
 
 
 def game(P):  # Ход игры
@@ -51,7 +84,11 @@ def game(P):  # Ход игры
           f'   +---+---+---+\n'
           f' ')
     for i in range(4):
+        print("Ходят 0")
         P[pole()] = "0"
+        w = "0"
+        if win(w, P):
+            break
         print(f'   +---+---+---+\n'
               f'   | {P[1]}¹| {P[2]}²| {P[3]}³|\n'
               f'   +---+---+---+\n'
@@ -60,7 +97,11 @@ def game(P):  # Ход игры
               f'   | {P[7]}⁷| {P[8]}⁸| {P[9]}⁹|\n'
               f'   +---+---+---+\n'
               f' ')
+        print("Ходят Х")
         P[pole()] = "X"
+        w = "X"
+        if win(w, P):
+            break
         print(f'   +---+---+---+\n'
               f'   | {P[1]}¹| {P[2]}²| {P[3]}³|\n'
               f'   +---+---+---+\n'
@@ -69,11 +110,22 @@ def game(P):  # Ход игры
               f'   | {P[7]}⁷| {P[8]}⁸| {P[9]}⁹|\n'
               f'   +---+---+---+\n'
               f' ')
+        if i == 3:
+            print('----Ничья----')
 
+    new_game()
+
+
+def new_game():
+    global P
+    P = {i: ' ' for i in range(1, 10)}
+    print("Сыграем еще раз? Y/N")
+    if input() == 'Y':
+        game(P)
+    else:
+        print("Спасибо за игру! До свидания!")
+        input()
 
 
 P = {i: ' ' for i in range(1, 10)}
-
 game(P)
-
-
